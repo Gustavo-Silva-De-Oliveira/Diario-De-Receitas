@@ -1,0 +1,75 @@
+body {
+  font-family: "Comfortaa", sans-serif;
+}
+.container {
+  display: flex;
+  align-items: flex-start;
+}
+/* Sub-Div do Título da Lista */
+.list {
+  padding: 15px;
+  text-align: center;
+  border: 1px solid;
+}
+
+/* Lista das receitas */
+.scroll {
+  height: 750px;
+  width: 430px;
+  overflow-y: auto;
+  border: 1px solid;
+  padding: 5px;
+  text-align: left;
+  line-height: 35px;
+  font-size: 22px;
+}
+/* Ajusta setinha */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  padding: 6px 0;
+}
+
+ul li::before {
+  margin-right: 5px;
+  content: "➤ "; /* pode trocar por →, ►, ➜, ➣ */
+  color: #444; /* opcional */
+  font-weight: bold;
+}
+/* Descrição seguida do resto */
+.description {
+  height: 87vh;
+  text-align: center;
+  border: 1px solid;
+  overflow-y: auto;
+}
+/* Ajusta imagem */
+#comida {
+  width: 350px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
+}
+/* Ajusta botão */
+#envia {
+  align-items: center;
+  padding: 12px 22px;
+  font-size: 20px;
+  margin: 20px;
+  margin-left: 200px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(85, 239, 85, 0.757);
+  cursor: pointer;
+  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.4);
+  transition: 0.3s;
+}
+
+#envia:hover {
+  background: rgb(85, 239, 85);
+  transform: scale(1.06);
+}
