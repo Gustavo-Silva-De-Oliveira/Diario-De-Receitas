@@ -1,3 +1,8 @@
+<!-- Projeto: Diário de Receitas
+  Autor: Gustavo Silva de Oliveira 
+  Ano: 2025
+  Descrição: Código desenvolvido exclusivamente para fins pessoais e estudo. -->
+
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
@@ -14,29 +19,38 @@
   <body>
     <div class="container">
       <div class="list">
-        <h3>Lista De Receitas</h3>
+        <h1>Lista De Receitas</h1>
         <div class="scroll">
           <ul id="nomesReceitas"></ul>
         </div>
+        <button id="enviar">Enviar</button>
+        <button id="editar">Editar</button>
+        <button id="remover">Remover</button>
       </div>
 
       <div class="description">
-        <h3>Descrição</h3>
         <img id="comida" />
-        <p id="descrição"></p>
-        <div>
-          <h3>Ingredientes</h3>
+        <div class="description-section">
+          <h2>Descrição</h2>
+          <p id="descrição"></p>
+        </div>
+        <div class="description-section">
+          <h2>Ingredientes</h2>
           <p id="ingredientes"></p>
         </div>
-        <div>
-          <h3>Modo de Preparo</h3>
+        <div class="description-section">
+          <h2>Modo de Preparo</h2>
           <p id="preparo"></p>
         </div>
       </div>
+      <div class="notas-container">
+        <h2>Notas da Receita</h2>
+        <textarea
+          id="bloco-notas"
+          placeholder="Escreva suas anotações aqui..."
+        ></textarea>
+      </div>
     </div>
-
-    <button id="enviar">Enviar Receita</button>
-    <button id="remover">Remover Receita</button>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="script.js"></script>

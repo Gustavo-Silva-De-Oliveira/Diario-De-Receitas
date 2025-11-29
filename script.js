@@ -1,5 +1,26 @@
+//  Projeto: Diário de Receitas
+//   Autor: Gustavo Silva de Oliveira
+//   Ano: 2025
+//   Descrição: Código desenvolvido exclusivamente para fins pessoais e estudo.
+
 // ---------------------
-// CARREGAR RECEITAS SALVAS AO ABRIR A PÁGINA
+// #region ALERTA DE REMOÇÃO
+// ---------------------
+
+const confirmAlert = Swal.mixin({
+  title: "Tem certeza?",
+  text: "Essa receita será removida permanentemente.",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonText: "Sim, remover",
+  cancelButtonText: "Cancelar",
+  reverseButtons: false,
+  focusCancel: true,
+});
+// #endregion
+
+// ---------------------
+// #region CARREGAR RECEITAS SALVAS AO ABRIR A PÁGINA
 // ---------------------
 let receitaSelecionada = null;
 window.onload = () => {
@@ -29,14 +50,17 @@ window.onload = () => {
       } else {
         document.getElementById("comida").src = "";
       }
+      carregarNotas(r.nome);
     });
 
     li.appendChild(link); // Coloca o link na <li>.
     nomesReceitas.appendChild(li); // Coloca a <li> dentro da <ul>.
   });
 };
+// #endregion
+
 // ---------------------
-// FUNÇÃO PARA ENVIAR RECEITAS
+// #region FUNÇÃO PARA ENVIAR RECEITAS
 // ---------------------
 document.getElementById("enviar").addEventListener("click", () => {
   // Função alerta para abrir aba de Inputs.
@@ -46,11 +70,11 @@ document.getElementById("enviar").addEventListener("click", () => {
     html: ` 
       <label for='file' class='file-label'>Envie uma foto!</label>
       <input type="file" accept=".png, .jpg, .jpeg" id="swal-imagem" class="custom-file-input">
-
+      
       <input type="text" id="swal-nome" class="swal2-input" placeholder="Nome da Receita">
-      <input type="text" id="swal-descricao" class="swal2-input" placeholder="Descreva sua Receita">
-      <input type="text" id="swal-ingredientes" class="swal2-input" placeholder="Ingredientes">
-      <input type="text" id="swal-preparo" class="swal2-input" placeholder="Modo de Preparo">
+      <textarea id="swal-descricao" class="swal2-textarea" placeholder="Descreva sua Receita"></textarea>
+      <textarea id="swal-ingredientes" class="swal2-textarea" placeholder="Ingredientes"></textarea>
+      <textarea id="swal-preparo" class="swal2-textarea" placeholder="Modo de Preparo"></textarea>
     `,
     confirmButtonText: "Enviar",
     focusConfirm: false,
@@ -127,6 +151,7 @@ document.getElementById("enviar").addEventListener("click", () => {
       } else {
         document.getElementById("comida").src = "";
       }
+      carregarNotas(nome);
     });
 
     novaReceita.appendChild(link);
@@ -153,43 +178,162 @@ document.getElementById("enviar").addEventListener("click", () => {
     localStorage.setItem("receitas", JSON.stringify(receitasSalvas));
   });
 });
+// #endregion
+
 // ---------------------
-// FUNÇÃO PARA APAGAR RECEITAS
+// #region BOTÃO EDITAR RECEITA
+// ---------------------
+
+document.getElementById("editar").addEventListener("click", () => {
+  if (!receitaSelecionada) {
+    Swal.fire({
+      icon: "warning",
+      title: "Nada selecionado",
+      text: "Escolha uma receita para editar!",
+    });
+    return;
+  }
+
+  Swal.fire({
+    title: "Editar Receita",
+    html: `
+      <input id="edit-nome" class="swal2-input" value="${receitaSelecionada.nome}">
+      <textarea id="edit-desc" class="swal2-textarea">${receitaSelecionada.descricao}</textarea>
+      <textarea id="edit-ing" class="swal2-textarea">${receitaSelecionada.ingredientes}</textarea>
+      <textarea id="edit-pre" class="swal2-textarea">${receitaSelecionada.preparo}</textarea>
+    `,
+    showCancelButton: true,
+    confirmButtonText: "Salvar",
+    cancelButtonText: "Cancelar",
+  }).then((result) => {
+    if (!result.isConfirmed) return;
+
+    let receitas = JSON.parse(localStorage.getItem("receitas")) || [];
+
+    // Procura pelo nome antigo.
+    const index = receitas.findIndex((r) => r.nome === receitaSelecionada.nome);
+    if (index === -1) return;
+
+    // Pega os valores novos/editados.
+    const novoNome = document.getElementById("edit-nome").value;
+    const novaDesc = document.getElementById("edit-desc").value;
+    const novoIng = document.getElementById("edit-ing").value;
+    const novoPre = document.getElementById("edit-pre").value;
+
+    // Atualiza o storage.
+    receitas[index].nome = novoNome;
+    receitas[index].descricao = novaDesc;
+    receitas[index].ingredientes = novoIng;
+    receitas[index].preparo = novoPre;
+
+    // Salva.
+    localStorage.setItem("receitas", JSON.stringify(receitas));
+
+    // Atualiza o selecionado.
+    receitaSelecionada = receitas[index];
+
+    // Atualiza na tela.
+    document.getElementById("descrição").textContent = novoNome;
+    document.getElementById("descrição").textContent = novaDesc;
+    document.getElementById("ingredientes").textContent = novoIng;
+    document.getElementById("preparo").textContent = novoPre;
+
+    // Recarrega a lista de receitas.
+    document.getElementById("nomesReceitas").innerHTML = "";
+    receitas.forEach((r) => {
+      const li = document.createElement("li");
+      const link = document.createElement("a");
+      link.textContent = r.nome;
+      link.href = "#";
+
+      link.addEventListener("click", () => {
+        receitaSelecionada = r;
+        document.getElementById("descrição").textContent = r.descricao;
+        document.getElementById("ingredientes").textContent = r.ingredientes;
+        document.getElementById("preparo").textContent = r.preparo;
+        document.getElementById("comida").src = r.imagem || "";
+        carregarNotas(r.nome);
+      });
+
+      li.appendChild(link);
+      document.getElementById("nomesReceitas").appendChild(li);
+    });
+
+    Swal.fire({
+      icon: "success",
+      title: "Receita atualizada!",
+      timer: 1500,
+      showConfirmButton: false,
+    });
+  });
+});
+// #endregion
+
+// ---------------------
+// #region FUNÇÃO PARA APAGAR RECEITAS
 // ---------------------
 document.getElementById("remover").addEventListener("click", () => {
   // Primeiro verifica se tem algo selecionado.
   if (!receitaSelecionada) {
-    alert("Nenhuma receita selecionada!");
+    Swal.fire({
+      icon: "warning",
+      title: "Nada selecionado",
+      text: "Escolha uma receita para remover!",
+    });
     return;
   }
+  confirmAlert.fire().then((result) => {
+    if (!result.isConfirmed) return;
 
-  // Busca no storage.
-  let receitas = JSON.parse(localStorage.getItem("receitas")) || [];
+    // Busca no storage.
+    let receitas = JSON.parse(localStorage.getItem("receitas")) || [];
 
-  // Remove a receita do localStorage
-  receitas = receitas.filter((r) => r.nome !== receitaSelecionada.nome);
-  localStorage.setItem("receitas", JSON.stringify(receitas));
+    // Remove a receita do localStorage
+    receitas = receitas.filter((r) => r.nome !== receitaSelecionada.nome);
+    localStorage.setItem("receitas", JSON.stringify(receitas));
 
-  // Remove da lista visual
-  const nomesReceitas = document.getElementById("nomesReceitas");
-  const links = nomesReceitas.querySelectorAll("a");
+    // Remove da lista visual
+    const nomesReceitas = document.getElementById("nomesReceitas");
+    const links = nomesReceitas.querySelectorAll("a");
 
-  links.forEach((a) => {
-    if (a.textContent === receitaSelecionada.nome) {
-      a.parentElement.remove();
-    }
+    links.forEach((a) => {
+      if (a.textContent === receitaSelecionada.nome) {
+        a.parentElement.remove();
+      }
+    });
+
+    // Limpar a descrição visual
+    document.getElementById("descrição").textContent = "";
+    document.getElementById("ingredientes").textContent = "";
+    document.getElementById("preparo").textContent = "";
+    document.getElementById("comida").src = "";
+
+    // Reseta
+    receitaSelecionada = null;
+    Swal.fire({
+      icon: "success",
+      title: "Removida!",
+      text: "A receita foi apagada com sucesso.",
+    });
   });
-
-  // Limpar a descrição visual
-  document.getElementById("descrição").textContent = "";
-  document.getElementById("ingredientes").textContent = "";
-  document.getElementById("preparo").textContent = "";
-  document.getElementById("comida").src = "";
-
-  // Reseta
-  receitaSelecionada = null;
-
-  alert("Receita removida!");
 });
+// #endregion
 
-// Por hoje é só, apanhei que nem cachorro.
+// ---------------------
+// #region BLOCO DE NOTAS DO BALACOBACO
+// ---------------------
+function carregarNotas(nomeReceita) {
+  const notasSalvas = JSON.parse(localStorage.getItem("notasReceitas")) || {};
+  document.getElementById("bloco-notas").value = notasSalvas[nomeReceita] || "";
+}
+
+document.getElementById("bloco-notas").addEventListener("input", () => {
+  if (!receitaSelecionada) return;
+
+  let notasStorage = JSON.parse(localStorage.getItem("notasReceitas")) || {};
+  notasStorage[receitaSelecionada.nome] =
+    document.getElementById("bloco-notas").value;
+
+  localStorage.setItem("notasReceitas", JSON.stringify(notasStorage));
+});
+// #endregion

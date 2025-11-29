@@ -1,27 +1,45 @@
+/* Projeto: Diário de Receitas
+  Autor: Gustavo Silva de Oliveira
+  Ano: 2025
+  Descrição: Código desenvolvido exclusivamente para fins pessoais e estudo. */
+
 body {
   font-family: "Comfortaa", sans-serif;
+  background-color: #ddeedb;
 }
 .container {
   display: flex;
   align-items: flex-start;
 }
-/* Sub-Div do Título da Lista */
+/* #region Sub-Div do Título da Lista */
 .list {
   padding: 15px;
   text-align: center;
-  border: 1px solid;
+  border: 1px solid #aaaaaa;
+  border-radius: 18px;
+  background-color: #bfd8b8;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
 }
+/* #endregion */
 
-/* Lista das receitas */
+/* #region Ajusta lista */
 .scroll {
-  height: 750px;
-  width: 430px;
+  height: 550px;
+  width: 460px;
   overflow-y: auto;
-  border: 1px solid;
+  border: 1px solid #aaaaaa;
+  border-radius: 18px;
   padding: 5px;
   text-align: left;
   line-height: 35px;
   font-size: 22px;
+  background-color: #f2c6d3;
+  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.1);
+}
+
+/* Faz as descrições entenderem quebra de linha. */
+p {
+  white-space: pre-wrap;
 }
 /* Ajusta setinha */
 ul {
@@ -39,28 +57,75 @@ ul li::before {
   color: #444; /* opcional */
   font-weight: bold;
 }
-/* Descrição seguida do resto */
+/* #endregion */
+
+/* #region Ajusta área de texto*/
 .description {
-  height: 87vh;
+  background-color: #bfd8b8;
+  border: 1px solid #c8c8c8;
+  border-radius: 16px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
+}
+.description img {
+  width: 300px;
+  border-radius: 14px;
+  float: right;
+  margin: 0 0 20px 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.description-section {
+  max-width: 700px;
+  line-height: 1.6;
+  background: #cfe8cc9a;
+  padding: 20px;
+  border-radius: 12px;
+  border-left: 6px solid #f2c6d3;
+  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.1);
+}
+/* #endregion */
+
+/* #region Ajusta área de notas. */
+.notas-container {
+  background: #d6e6d1;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #c8c8c8;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.notas-container h2 {
+  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: bold;
   text-align: center;
-  border: 1px solid;
-  overflow-y: auto;
 }
-/* Ajusta imagem */
-#comida {
-  width: 350px;
-  height: 250px;
-  object-fit: cover;
-  border-radius: 10px;
-  box-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
+
+#bloco-notas {
+  width: 550px;
+  height: 150px;
+  border: none;
+  resize: both;
+  outline: none;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 18px;
+  background: #f3f7f2;
+  box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.1);
 }
-/* Ajusta botão envia */
+/* #endregion */
+
+/* #region Botões */
+
+/* Ajusta botão Envia */
 #enviar {
   align-items: center;
-  padding: 12px 22px;
+  padding: 12px 12px;
   font-size: 20px;
   margin: 20px;
-  margin-left: 30px;
   border-radius: 8px;
   border: none;
   background: rgba(85, 239, 85, 0.757);
@@ -69,14 +134,35 @@ ul li::before {
   transition: 0.3s;
 }
 
-#envia:hover {
+#enviar:hover {
   background: rgb(85, 239, 85);
   transform: scale(1.06);
 }
 
+/* Ajusta botão Edita */
+#editar {
+  align-items: center;
+  padding: 12px 12px;
+  font-size: 20px;
+  margin: 20px;
+  margin-left: 30px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(85, 136, 239, 0.757);
+  cursor: pointer;
+  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.4);
+  transition: 0.3s;
+}
+
+#editar:hover {
+  background: rgb(85, 136, 239);
+  transform: scale(1.06);
+}
+
+/* Ajusta botão Remove */
 #remover {
   align-items: center;
-  padding: 12px 22px;
+  padding: 12px 12px;
   font-size: 20px;
   margin: 20px;
   margin-left: 30px;
@@ -92,7 +178,9 @@ ul li::before {
   background: rgb(239, 85, 85);
   transform: scale(1.06);
 }
+/* #endregion */
 
+/* #region Input File */
 .custom-file-input {
   padding: 15px;
   border: 1px solid #ccc;
@@ -121,3 +209,4 @@ ul li::before {
   font-weight: bold;
   font-style: oblique;
 }
+/* #endregion */
